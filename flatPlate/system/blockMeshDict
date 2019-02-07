@@ -1,0 +1,115 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1806                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale 0.333333333333333;    //scale of the whole mesh
+
+vertices                    //definition of vertices needed for defining 
+(                           //  two hexes (numbering starts from 0)
+    (-1 0 0.3)
+    (0 0 0.3)
+    (6 0 0.3)
+    (6 3 0.3)
+    (0 3 0.3)
+    (-1 3 0.3)
+
+    (-1 0 0)
+    (0 0 0)
+    (6 0 0)
+    (6 3 0)
+    (0 3 0)
+    (-1 3 0)
+);
+
+blocks                      //defing two blocks 
+(
+    hex (6 7 10 11 0 1 4 5)         //definition of a hex by 8 vertices
+        ( 96 385 1)                 //divisions of mesh in x, y and z directions
+        simpleGrading (((1 9 0.15)(0.1 3 0.9)) 50000 1) //grading of the mesh
+    hex (7 8  9 10 1 2 3 4) 
+        (449 385 1) 
+        simpleGrading (((0.1 22 1.5)(0.35 23 7)(0.515 12 1)) 50000 1)
+);
+
+edges                       //definition of the edges (not used here)
+(
+);
+
+
+boundary                    //definition of boundary patches 
+(
+    inlet                   //patch name    
+    {
+        type patch;         
+        faces               //faces defining patch (by vertex number)
+        (
+            (6 0 5 11)
+        );
+    }
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (8 9 3 2)
+        );
+    }
+    topWall
+    {
+        type wall;          //if patch is of type wall than postprocessing 
+        faces               //   tools such as yPlus will be used on this 
+        (                   //   patches
+            (11 5 4 10)
+            (10 4 3 9)
+        );
+    }
+    bottomWall
+    {
+        type wall;
+        faces
+        (
+            (7 8 2 1)
+        );
+    }
+    symmetry
+    {
+        type symmetryPlane;
+        faces
+        (
+            (6 7 1 0)
+        );
+    }
+    frontAndBack //empty boundary condition - reducing 3D to 2D
+    {
+        type empty;
+        faces
+        (
+            (0 1 4 5)
+            (1 2 3 4)
+            (6 11 10 7)
+            (7 10 9 8)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
+
+
+
+

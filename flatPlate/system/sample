@@ -1,0 +1,32 @@
+type            sets;
+libs            ("libsampling.so");
+
+writeControl    writeTime;
+
+interpolationScheme cellPoint;
+
+setFormat       raw;
+surfaceFormat   boundaryData;
+
+sets
+(
+
+    plateHorizontal
+    {
+        type    face;
+        axis    xyz;
+        start   (0.1 0.2 0);
+        end     (2 0.4 0);
+        nPoints 1000;
+    }
+
+    plateBegin
+    {
+        type    cloud;
+        axis    xyz;
+        points (#include "points");
+    }
+
+);
+
+fields          (p U k omega);

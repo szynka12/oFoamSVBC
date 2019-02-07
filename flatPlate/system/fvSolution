@@ -1,0 +1,114 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1806                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p
+    {
+        solver          GAMG;
+        tolerance       1e-16;
+        relTol          0.001;
+        smoother        GaussSeidel;
+        nPreSweeps      1;
+        nPostSweeps     3;
+        nFinestSweeps   1;
+        cacheAgglomeration on;
+        agglomerator    faceAreaPair;
+        nCellsInCoarsestLevel 128;
+        mergeLevels     1;
+    }
+
+    U
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-16;
+        relTol          0.01;
+    }
+
+    k
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-16;
+        relTol          0;
+    }
+    
+    omega
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-16;
+        relTol          0;
+    }
+    
+    pFinal
+    {
+        $p;
+        relTol          0;
+    }
+
+    "(U|k|omega)Final"
+    {
+        $U;
+        relTol          0;
+    }
+
+}
+
+SIMPLE
+{
+    nNonOrthogonalCorrectors 0;
+
+
+    residualControl
+    {
+        p               1e-8;
+        U               1e-8;
+        "(k|epsilon|omega)" 1e-8;
+    }
+
+
+    consistent          yes;
+}
+
+PIMPLE
+{
+    nNonOrthogonalCorrectors 0;
+    nCorrectors         2;
+
+    
+}
+
+relaxationFactors
+{
+    equations
+    {
+        U               0.5;
+        p               0.3;
+        k               0.5;
+        omega           0.5;
+    }
+}
+
+
+cache
+{
+    grad(U);
+}
+
+// ************************************************************************* //
