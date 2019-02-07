@@ -1,0 +1,45 @@
+\chapter{Introduction}
+    \section{Goal of the project}
+        This work aims to achieve several goals. First one is to learn \oFoam package. 
+        Get to know it's abilities and use it comfortably despite of it's rather intimidating text and console based user interface.
+        Finally use it extensively for other projects since it is freely available as open source code.
+
+        Second goal is to understand how to impose space-varying boundary conditions in \oFoam.
+        In many CFD problems there is a need to impose an non uniform boundary condition, based for example on a measured data of certain quantities, in order to achieve the same conditions as in the experiment.
+        One example of such situation could be validation of a simulation code or a model against collected data.
+        
+        
+        Third goal would be to assert if conducting simulations with such boundary conditions is appropriate enough for \oFoam to be used as validation tool for various CFD models.
+        In order to do that, a simple two dimensional test case will be considered and flow simulation will be performed.
+        Next domain will be trimmed. Appropriate space-varying boundary conditions will be imposed on this new domain (generated from solution of the first simulation). Solution from both cases will be compared and studied.
+        \begin{figure}[h]
+            \centering
+            \includestandalone[width=\linewidth]{Introduction/tikz/flatplate}
+            \caption{Depiction of physical domains for first and second simulation with a descriptions of the boundary conditions of the original domain (including the placements of two sampling lines used for comparison of conducted simulations)}
+            \label{fig::flatplate}
+        \end{figure}
+
+    \section{Description of the test case}
+        In order to grasp wide spectrum of \oFoam possibilities, test case with fully turbulent flow was chosen: flow over a plat plate.
+        It is a simple and very popular case, used often for turbulent model validation (the best resources describing this specific flow and an archive of validation data for turbulence models is available here~\cite{Nasa}).
+
+        
+        Simulated flow is two dimensional and incompressible (see fig. \ref{fig::flatplate}). 
+        Fluid has kinematic viscosity of the air: 
+        \begin{equation*}
+            \nu =  \SI{1.5e-5}{\metre\squared\per\second}
+        \end{equation*}
+        Reynolds number $Re$ of the flow (see chapter \ref{ch::turbulence}) is equal $\num{5e6}$. Characteristic length that is used to calculate $Re$ is exactly $\SI{1}{\meter}$. 
+        Knowing those parameters velocity of the fluid at the inlet can be calculated:
+        \begin{equation*}
+            u = \SI{75}{\metre\per\second}
+        \end{equation*}
+        Turbulent intensity $t_i$, at the inlet (defined as a fraction of turbulent velocity fluctuations to mean velocity value $\nicefrac{u'}{u}$) is equal to $\num{0,05}$.
+        Characteristic length scale $l_T$ of those fluctuations is $\SI{1}{\meter}$.
+
+        Second simulation will be conducted on the trimmed domain. Fields computed from the first one will be sampled along lines describing new area of calculations. Extracted data will be used to impose correct boundary conditions in the latter case. 
+
+       
+        
+
+        

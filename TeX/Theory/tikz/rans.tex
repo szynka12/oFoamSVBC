@@ -1,0 +1,24 @@
+\documentclass[tikz]{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+
+\begin{document}
+\begin{tikzpicture}
+        \draw [opacity=0]
+            (-6,0) -- (10,0) -- (10,4) -- (-6,4) --cycle;
+        \hspace{-5cm}
+          \begin{axis}[width=6cm, axis lines=middle, xlabel={$t$}, ylabel={$\phi$}, no marks, smooth, xmin=0, xmax=2, ymin=0, ymax=2.5, samples=600, ticks=none]
+            \addplot {sin(x*180/(2*3.14))/2 + 0.8 + sin(x*180/(2*3.14)*10)/6 + sin(x*180/(2*3.14)*34)/20 + sin(x*180/3.14*60)/30};
+          \end{axis}
+          \hspace{5cm}
+          \node[] at (- 0.25, 2cm)   (a) {=};
+          \begin{axis}[width=6cm, axis lines=middle, xlabel={$t$}, ylabel={$\overline{\phi}$}, no marks, smooth, xmin=0, xmax=2, ymin=0, ymax=2.5, samples=600, ticks=none]
+            \addplot+ {sin(x*180/(2*3.14))/2 + 0.8 + sin(x*180/(2*3.14)*10)/6};
+          \end{axis}
+          \hspace{5cm}
+          \node[] at (- 0.25, 2cm)   (b) {+};
+          \begin{axis}[width=6cm, axis lines=middle, xlabel={$t$}, ylabel={$\phi'$}, no marks, smooth, xmin=0, xmax=2, ymin=-1.25, ymax=1.25, samples=600, ticks=none]
+            \addplot+ {sin(x*180/(2*3.14)*34)/20 + sin(x*180/3.14*60)/30};
+          \end{axis}
+\end{tikzpicture}
+\end{document}

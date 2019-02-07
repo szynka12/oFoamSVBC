@@ -1,0 +1,145 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{diploma}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%   <DO NOT EDIT IF YOU DON'T KNOW WHAT YOU ARE DOING>
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+%Lipsum text
+\RequirePackage{lipsum}
+
+%Polish language
+% \RequirePackage[T1]{fontenc}
+% \RequirePackage{polski}
+% \RequirePackage[utf8]{inputenc} 
+
+%Headers and footers
+\RequirePackage{fancyhdr}
+\fancypagestyle{main}{%
+	\fancyhf{}
+	\fancyhead[L]{\leftmark}
+    \fancyfoot[R]{\thepage}
+    \fancyfoot[L]{\makeatletter\@title\makeatother %
+             }
+}
+\fancypagestyle{plain}{%
+    \fancyhf{}
+    \fancyhead{}
+    \renewcommand{\headrulewidth}{0pt}
+    % \fancyhead[L]{\leftmark}
+    \fancyfoot[R]{\thepage}
+    \fancyfoot[L]{\makeatletter\@title\makeatother %
+             }
+}
+
+%Math things
+\RequirePackage{amsmath, amssymb, bm, nicefrac}
+
+%Colours
+\RequirePackage{xcolor}
+
+%Page geometry~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\RequirePackage{geometry}
+\geometry{
+ a4paper,
+ %total={170mm,257mm},
+ left=20mm,
+ right=20mm,
+ top=20mm,
+ }
+
+%Better looking docs
+\RequirePackage{microtype}
+
+%To dos
+\usepackage{todonotes}
+
+%Bibliography styles
+\bibliographystyle{plain}
+
+%simple quotes
+\RequirePackage{dirtytalk}
+
+%Customizing enumeration and itemize~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\RequirePackage{enumitem}
+
+%Nice plots and drawings~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\RequirePackage{tikz, pgfplots}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings}
+\RequirePackage{standalone}
+\pgfplotsset{compat=1.16} 
+
+%Code insertion ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\RequirePackage{listings}
+\lstset{
+  language=bash,
+  basicstyle=\ttfamily
+}
+\lstset{language=C++,
+        basicstyle=\ttfamily,
+        keywordstyle=\color{blue}\ttfamily,
+        stringstyle=\color{red}\ttfamily,
+        commentstyle=\color{green}\ttfamily,
+        morecomment=[l][\color{magenta}]{\#}
+}
+
+%Package for urls
+\RequirePackage{hyperref}
+
+%Physics units
+\RequirePackage{siunitx}
+\sisetup{per-mode=symbol}
+
+%Package for listing file and directory trees
+\RequirePackage{dirtree}
+
+%New commands~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\newcommand{\pderiv}[2]{
+    \dfrac{\partial {#1}}{\partial {#2}}
+}
+  
+\newcommand{\bVec}[1]{
+    \bm{{#1}}
+}
+
+\newcommand{\rans}[1]{
+    \overline{{#1}}
+}
+
+\newcommand{\vMag}[1]{
+    \lvert {#1} \rvert
+}
+
+
+\newcommand{\oFoam}{%
+    \textbf{OpenFOAM}
+}
+  
+
+\newcommand{\noop}[1]{}
+
+\newcommand{\placeTitlePage}{
+    \begin{titlepage}
+        \centering
+        {\scshape\LARGE Politechnika Warszawska\par}
+        \vspace{0.3cm}
+        {\scshape\large Wydział Mechaniczny Energetyki i Lotnictwa\par}
+        \vspace{1cm}
+        {\scshape\Large Praca przejściowa magisterska\par}
+        \vspace{1.5cm}
+        {\huge\bfseries \makeatletter\@title\makeatother \par}
+        \vspace{2cm}
+        {\Large\itshape Wojciech Sadowski\par}
+        \vfill
+    % Bottom of the page
+        {\Large\itshape Opiekun pracy:\\%
+                        dr hab. inż. Sławomir Kubacki\par}
+        \vspace{2cm}
+        {\large \today\par}
+    \end{titlepage}
+}
+%Redefinitions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%Title page redefinition
+
+
+\endinput

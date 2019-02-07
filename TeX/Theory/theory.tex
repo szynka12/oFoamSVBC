@@ -1,0 +1,151 @@
+\chapter{Theoretical background}
+    \section{Turbulence and RANS equations}
+        \label{ch::turbulence}
+        Each flow can be characterised by a non dimensional number called the \emph{Reynolds number}:
+        \begin{equation}
+        Re = \dfrac{uL}{\nu}
+        \end{equation}
+        In the above expression symbols $u$, $L$ and $\nu$ denotes:
+        \begin{itemize}
+        \item[$u$] - velocity scale of the flow (e.g inlet velocity);
+        \item[$L$] - characteristic length of the domain (e.g height of the step in backward facing step case);
+        \item[$\nu$] - kinematic viscosity of the fluid.
+        \end{itemize}
+        Experiments conducted by Osborne Reynolds~\cite{Reynolds1883} prove that for low Reynolds numbers flow will remain stable even under the influence of big disturbances (e.g. separation, wall surface roughness).
+        However, above certain Reynolds number each flow will lose it's laminar nature and become unstable even under the influence of very small disturbances. 
+        
+        Resulting oscillating flow is called turbulent. It can be described by three distinct features:
+        \begin{itemize}
+            \item presence of eddies and swirling motion;
+            \item chaotic movement of the flow (small changes in initial conditions will cause drastic changes in flow appearance);
+            \item greatly increased diffusion of any flow quantity by turbulent oscillations. 
+        \end{itemize}
+
+        Turbulence can be simulated directly. 
+        Navier-Stokes equations fully describes flow of any fluid, turbulent motion included.
+        Such numerical experiments are named \emph{DNS} (Direct Numerical Simulation).
+        Unfortunately such approach has many disadvantages:
+        \begin{itemize}
+        \item in order to simulate any turbulent flow very fine mesh is necessary~\cite{Wilcox}
+        \item simulation of that kind can not be simplified to a two dimensional case - turbulence is inherently a three dimensional phenomenon~\cite{landau2013fluid};
+        \item DNS simulation generates a lot of data and full simulation may take days or months.
+        \end{itemize}
+
+        As of today DNS is not a viable option option for industrial CFD applications~\cite{Spalart}. Luckily there are other means to describe effects that turbulence has on fluid flow.
+        In each turbulent flow two components of movement can be easily distinguished - one describing mean motion of he flow and the other corresponding to turbulent oscillations and eddies. 
+        Given that, any field $\phi$ describing such flow can be decomposed into two separate fields:
+        \begin{equation}
+        \phi = \rans{\phi} + \phi'
+        \end{equation}
+        In above expression $\rans{\phi}$ denotes time averaged value~\cite{Wilcox} of $\phi$ and $\phi'$ describes turbulent fluctuations (see fig \ref{fig:RANSdecom}).
+
+        \begin{figure}
+            \centering
+            \includestandalone[width = \linewidth]{Theory/tikz/rans}
+            \label{fig:RANSdecom}
+            \caption{Decomposition of field variable $\phi$ into time average and fluctuation part}
+        \end{figure}
+
+        In general data describing fluctuations $\phi'$ is not useful. Mean properties of the flow, on the other hand, provide much more advantageous information.
+        In two similar flows, instantaneous image of two turbulent flows will be drastically different as fluctuations are chaotic in nature.
+        Mean values of e.g. velocity fields will be comparable.
+
+        In order to achieve quantitative description of fluid flow in terms of averaged variables $\rans{\bVec{u}}$ and $\rans{p}$ two operations on Navier-Stokes equations must be made:
+        \begin{enumerate}
+        \item Each variable must be decomposed into it's averaged and oscillating parts.
+        \item Whole system of Navier-Stokes equations must be averaged in time.
+        \end{enumerate}
+        Having performed them, several of arising terms can be dropped and simplified resulting in \emph{Reynolds Averaged Navier-Stokes} (RANS) equations:
+        \begin{equation}
+        \begin{cases}
+            &\pderiv{\rans{\bVec{u}}}{t} + (\rans{\bVec{u}} \cdot \nabla)\rans{\bVec{u}} = -\nabla \Big(\dfrac{\rans{p}}{\rho} \Big) %
+            + \nabla\cdot \Big(\nu\nabla\rans{\bVec{u}} + \nu\nabla^T \rans{\bVec{u}} + \bm{\tau} \Big)\\
+            &\nabla \cdot \rans{\bVec{u}} = 0
+        \end{cases}
+        \end{equation}
+        The tensor $\bm{\tau}$ is called Reynolds stress tensor. It is symmetric and its components are defined in the following way:
+        \begin{equation}
+        \tau_{ij} = -\rans{u_i' u_j'}
+        \end{equation}
+
+        It represents effect turbulence has on the flow. Observing the above equation two remarks can be made.
+        Firstly $\bm{\tau}$ is present in the exact part of equation that is "responsible" for viscous dissipation i.e. diffusion of momentum.
+        It corresponds with one of the aforementioned features of turbulence: eddies increase mixing of the velocity field.
+        Secondly, if Reynolds tensor is dropped from the equation original Navier-Stokes formulation is recovered.
+
+        Unfortunately components of $\bm{\tau}$ are dependent on fluctuating parts of velocity field.
+        Since no assumptions can be made about turbulent fluctuations, values of all six components of this tensor must be modelled.
+        Te process of modelling components of $\bm{\tau}$ is often denoted as "closure".
+
+        First step in closing RANS equation is assuming that Boussinesq eddy viscosity theory holds.
+        It states that momentum transfer caused by turbulent eddies can be modelled by adding artificial eddy viscosity.
+        Tensor $\bm{\tau}$ is then defined as:
+        \begin{equation}
+            \tau_{ij} =  2\nu_T S_{ij} - \dfrac{2}{3}\rans{u_\alpha' u_\alpha'}\delta_{ij} = 2\nu_T \Big(\pderiv{\rans{u}_i}{x_j} + \pderiv{\rans{u}_j}{x_i} \Big) - \dfrac{2}{3}\rans{u_\alpha' u_\alpha'}\delta_{ij}
+        \end{equation}
+        The last term on the right can be ignored for non-supersonic speed flows~\cite{Wilcox}.
+        The newly introduced viscosity must be calculated by a chosen turbulent model.
+        RANS equation after substituting Boussinesq assumption looks as follows:
+        \begin{equation}
+            \begin{cases}
+            &\pderiv{\rans{u}_i}{t} + \rans{u}_j \pderiv{\rans{u}_i}{x_j} = -\pderiv{}{x_i}\Big(\dfrac{\rans{p}}{\rho}\Big) %
+            + \pderiv{}{x_j}\Big[ (\nu + \nu_T)\Big( \pderiv{\rans{u}_i}{x_j} + \pderiv{\rans{{u}_j}}{{x_i}} \Big) \Big]\\
+            &\pderiv{\rans{u}_k}{x_j} = 0
+            \end{cases}
+        \end{equation}
+
+    \section{Wilcox k-$\omega$ turbulence model}
+        
+        In order to calculate turbulent viscosity $\nu_T$ system of two partial differential equations is introduced
+        \begin{equation}
+            \begin{cases}
+            &\pderiv{k}{t} + \rans{u}_j \pderiv{k}{x_j} = P_k - \beta^*\omega k + %
+            \pderiv{}{x_j}\Big[ (\nu + \sigma_k \dfrac{k}{\omega}) \pderiv{k}{x_j} \Big]\\
+            &\pderiv{\omega}{t} + \rans{u}_j \pderiv{\omega}{x_j} = \dfrac{\gamma \omega}{k}P_k - \beta\omega^2 + %
+            \pderiv{}{x_j}\Big[ (\nu + \sigma_\omega \dfrac{k}{\omega}) \pderiv{\omega}{x_j} \Big]
+            \end{cases}
+        \end{equation}
+        First one is the equation for transport of kinetic energy of turbulent fluctuations $k$, that is defined in a following way:
+        \begin{equation}
+            k = \dfrac{1}{2}\rans{u'_i u'_i}
+            \label{eq:k_def}
+        \end{equation}
+        Another scalar variable that is solved for is $\omega$ - the rate at which turbulence kinetic energy is dissipated per unit volume and time. Sometimes it is also referred to as the mean frequency of the turbulence. 
+        Using those two quantities $\nu_T$ can be computed:
+        \begin{equation}
+            \nu_T = \dfrac{k}{\omega}
+        \end{equation}
+
+
+        First term on the right in the first equation is denoted as production of kinetic energy and calculated with following formula:
+        \begin{equation}
+            P_k = \nu_T S^2,\quad S = \sqrt{2S_{ij}S_{ij} }
+        \end{equation}
+        Constants present in the model have following values:
+        \begin{equation*}
+            \sigma_k = \sigma_\omega = 0.5,\quad \gamma = \dfrac{5}{9}
+        \end{equation*}
+
+        \begin{equation*}
+            \beta = \dfrac{3}{40},\quad \beta^* = 0.09
+        \end{equation*}
+
+        In order to solve this system of equations appropriate boundary conditions must be specified. Boundary condition for $k$ can be easily deduced from it's definition (\ref{eq:k_def}):
+        \begin{equation}
+            k_{wall} = 0
+        \end{equation}
+        The same boundary condition for $\omega$ can be obtained by asymptotic analysis of the model behaviour near the solid wall~\cite{Wilcox}:
+        \begin{equation}
+            \omega_{wall} = \dfrac{6\nu}{\beta d_1^2}
+        \end{equation}
+        Variable $d_1$ is the distance from solid wall to the nearest integration point.
+        Additionally inlet boundary conditions must be specified; for $k$:
+        \begin{equation*}
+            k_{inlet} = \dfrac{3}{2}(\vMag{\bVec{u}}t_i)^2
+        \end{equation*}
+        and for $\omega$:
+        \begin{equation*}
+            \omega{inlet} = \dfrac{\sqrt{k_{inlet}}}{l_T}
+        \end{equation*}
+
+        

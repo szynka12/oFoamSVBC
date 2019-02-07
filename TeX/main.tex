@@ -1,0 +1,41 @@
+\documentclass[a4paper]{report}
+
+\usepackage{diploma}
+
+\title{Utilisation of space-varying boundary conditions in OpenFOAM  numerical package} 
+
+\pagestyle{main}
+\begin{document}
+    \placeTitlePage
+    \setcounter{page}{1}
+    \pagenumbering{Roman}
+    \tableofcontents
+    \listoffigures
+    \clearpage
+    \setcounter{page}{1}
+    \pagenumbering{arabic}
+
+
+    \include{Introduction/introduction}
+    \include{Theory/theory}
+    \include{OFoam/ofoam}
+    \include{Results/results}
+
+    \chapter{Conclusions}
+        Both simulations achieved very similar results differing very slightly (relative differences in field quantities were \SI{2}{\percent} at most on both of sampled lines). Those differences can be attributed mostly to two factors:
+        \begin{itemize}
+            \item Different mesh resolutions in  both simulations. 
+            Each mesh was graded in the direction of the plates wall in order to achieve correct $y^+$ value (around \num{0,05} in case of original domain and \num{0.68} in the latter one), however mesh created for the second simulation is noticeably coarser.
+            The reasoning behind this was to increase convergence rate by limiting high values of $\omega$ that can arise very close to the viscous wall.
+            Nevertheless both meshes have adequate resolution to represent physical phenomena that arise in that type of flow.
+            \item In the boundary layer region sampling points were separated by logarithmically rising intervals in order to account for sharply changing turbulent quantities. Sampled data was then linearly interpolated in order to impose boundary conditions. This interpolation might have introduced slight error in the fields that was than convected along plates surface.
+        \end{itemize}
+
+        In conclusion, goals that ware stated in the begging of this work were achieved. Author learned basic usage of \oFoam along with some other advanced practices i.e. tweaking linear solver settings or utilising advanced time and space varying boundary conditions.
+
+        In the same time, this work has proven that \oFoam can be used as a tool for validation of various CFD models against experiments. Sampled data from those experiments can be used as boundary conditions in order to observe flow behaviour and assert validity of chosen model.
+    
+    \appendix
+
+    \bibliography{Literature/bibfile}
+\end{document} 
